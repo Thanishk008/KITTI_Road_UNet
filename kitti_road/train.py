@@ -74,12 +74,12 @@ def make_loaders(config: Dict[str, Any], train: bool = True):
     return train_loader, val_loader
 
 
-def evaluate_epoch(model, loader, criterion, device, threshold: float, use_amp: bool) -> Dict[str, Any]:
+def evaluate_epoch(model, loader, criterion, device, threshold: float, use_amp: bool, desc: str = "val") -> Dict[str, Any]:
     model.eval()
     total_loss = 0.0
     accumulator = MetricAccumulator(threshold=threshold)
     with torch.no_grad():
-        for images, masks, scenarios, _ids in tqdm(loader, desc="val", leave=False):
+        for images, masks, scenarios, _ids in tqdm(loader, desc=desc, leave=False):
             images = images.to(device, non_blocking=True)
             masks = masks.to(device, non_blocking=True)
             with autocast(device_type="cuda", enabled=use_amp):
@@ -164,11 +164,12 @@ def train(config_path: Path, resume: Path | None = None, cpu: bool = False, over
 
     rows = []
     fieldnames = ["epoch", "train_loss", "val_loss", "iou", "dice", "precision", "recall", "pixel_accuracy", "ap", "max_f", "seconds"]
-    for epoch in range(start_epoch, int(config["training"]["epochs"]) + 1):
+    total_epochs = int(config["training"]["epochs"])
+    for epoch in range(start_epoch, total_epochs + 1):
         started = time.perf_counter()
         model.train()
         running_loss = 0.0
-        progress = tqdm(train_loader, desc=f"epoch {epoch} train", leave=True)
+        progress = tqdm(train_loader, desc=f"epoch {epoch}/{total_epochs} train", leave=True)
         for images, masks, _scenarios, _ids in progress:
             images = images.to(device, non_blocking=True)
             masks = masks.to(device, non_blocking=True)
@@ -183,7 +184,7 @@ def train(config_path: Path, resume: Path | None = None, cpu: bool = False, over
             progress.set_postfix(loss=f"{running_loss / max(1, progress.n):.4f}", lr=f"{scheduler.get_last_lr()[0]:.2e}")
         scheduler.step()
 
-        val = evaluate_epoch(model, val_loader, criterion, device, float(config["training"].get("threshold", 0.5)), use_amp)
+        val = evaluate_epoch(model, val_loader, criterion, device, float(config["training"].get("threshold", 0.5)), use_amp, desc=f"epoch {epoch}/{total_epochs} val")
         row = {
             "epoch": epoch,
             "train_loss": round(running_loss / max(1, len(train_loader)), 6),
