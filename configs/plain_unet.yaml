@@ -1,0 +1,23 @@
+experiment_name: plain_unet
+model:
+  name: plain_unet
+  base_channels: 32
+  depth: 4
+  group_norm_groups: 8
+data:
+  processed: data/processed/kitti_road
+  image_size: [384, 1216]
+  val_fraction: 0.2
+  seed: 6681
+training:
+  epochs: 80
+  batch_size: 4
+  num_workers: 4
+  lr: 0.0003
+  weight_decay: 0.0001
+  amp: true
+  save_every: 10
+  threshold: 0.5
+outputs:
+  checkpoint_dir: checkpoints
+  report_dir: reports

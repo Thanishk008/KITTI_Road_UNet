@@ -1,0 +1,64 @@
+# Python environments and caches
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.mypy_cache/
+.ruff_cache/
+.cache/
+
+# Notebook and Colab noise
+.ipynb_checkpoints/
+*.ipynb_checkpoints/
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Data: never commit KITTI images or processed splits
+data/raw/
+data/processed/
+data_road/
+*.png.meta
+
+# Training outputs and large model files
+checkpoints/*
+!checkpoints/.gitkeep
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.safetensors
+
+# Generated reports and experiment artifacts
+reports/**/*.csv
+reports/**/*.json
+reports/**/*.png
+reports/**/*.jpg
+reports/**/*.jpeg
+reports/**/*.pdf
+reports/predictions/
+reports/qualitative_overlays/
+reports/error_examples/
+!reports/.gitkeep
+!reports/a_plus_report_blueprint.md
+!reports/figures/
+!reports/figures/residual_road_unet_graph.png
+
+# Experiment trackers and logs
+wandb/
+runs/
+lightning_logs/
+mlruns/
+*.log
+*.tmp
+
+# Archives and OS files
+*.zip
+*.tar
+*.tar.gz
+*.7z
+.DS_Store
+Thumbs.db
