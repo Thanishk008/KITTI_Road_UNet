@@ -14,10 +14,10 @@ CONFIGS = [
 ]
 
 CHECKPOINTS = [
-    "checkpoints/road_unet_best.pt",
-    "checkpoints/plain_unet_best.pt",
-    "checkpoints/no_skip_unet_best.pt",
-    "checkpoints/pretrained_resnet34_unet_best.pt",
+    "checkpoints/road_unet/best.pt",
+    "checkpoints/plain_unet/best.pt",
+    "checkpoints/no_skip_unet/best.pt",
+    "checkpoints/pretrained_resnet34_unet/best.pt",
 ]
 
 

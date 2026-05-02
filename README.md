@@ -137,17 +137,17 @@ Common override flags:
 Evaluate:
 
 ```bash
-python -m kitti_road.evaluate --checkpoint checkpoints/road_unet_best.pt --split val
-python -m kitti_road.evaluate --checkpoint checkpoints/plain_unet_best.pt --split val
-python -m kitti_road.evaluate --checkpoint checkpoints/no_skip_unet_best.pt --split val
-python -m kitti_road.evaluate --checkpoint checkpoints/pretrained_resnet34_unet_best.pt --split val
+python -m kitti_road.evaluate --checkpoint checkpoints/road_unet/best.pt --split val
+python -m kitti_road.evaluate --checkpoint checkpoints/plain_unet/best.pt --split val
+python -m kitti_road.evaluate --checkpoint checkpoints/no_skip_unet/best.pt --split val
+python -m kitti_road.evaluate --checkpoint checkpoints/pretrained_resnet34_unet/best.pt --split val
 python scripts/verify_artifacts.py
 ```
 
 Generate extra prediction overlays:
 
 ```bash
-python -m kitti_road.predict --checkpoint checkpoints/road_unet_best.pt --images /content/data/data_road/training/image_2 --out reports/predictions
+python -m kitti_road.predict --checkpoint checkpoints/road_unet/best.pt --images /content/data/data_road/training/image_2 --out reports/predictions
 ```
 
 ## Scripts
@@ -175,6 +175,23 @@ After `run_everything.py` completes, use these files for the report:
 - `reports/analysis/combined_dice.png`
 - `reports/analysis/road_unet_overlay_contact_sheet.png`
 - `reports/analysis/road_unet_error_contact_sheet.png`
+
+Per-model outputs are organized under:
+
+```text
+reports/by_model/<experiment>/
+checkpoints/<experiment>/
+```
+
+For example:
+
+```text
+reports/by_model/road_unet/metrics.csv
+reports/by_model/road_unet/val_evaluation.json
+reports/by_model/road_unet/loss_curves.png
+reports/by_model/road_unet/qualitative_overlays/
+checkpoints/road_unet/best.pt
+```
 
 ## Report Source
 

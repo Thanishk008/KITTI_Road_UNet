@@ -34,6 +34,7 @@ def plot_curves(rows: list[Dict], report_dir: str | Path, experiment_name: str) 
     report_dir.mkdir(parents=True, exist_ok=True)
     if not rows:
         return
+    prefix = f"{experiment_name}_" if experiment_name else ""
     epochs = [row["epoch"] for row in rows]
     plt.figure(figsize=(8, 5))
     plt.plot(epochs, [row["train_loss"] for row in rows], label="train loss")
@@ -42,7 +43,7 @@ def plot_curves(rows: list[Dict], report_dir: str | Path, experiment_name: str) 
     plt.ylabel("Loss")
     plt.legend()
     plt.tight_layout()
-    plt.savefig(report_dir / f"{experiment_name}_loss_curves.png", dpi=160)
+    plt.savefig(report_dir / f"{prefix}loss_curves.png", dpi=160)
     plt.close()
 
     plt.figure(figsize=(8, 5))
@@ -52,7 +53,7 @@ def plot_curves(rows: list[Dict], report_dir: str | Path, experiment_name: str) 
     plt.ylabel("Score")
     plt.legend()
     plt.tight_layout()
-    plt.savefig(report_dir / f"{experiment_name}_iou_curves.png", dpi=160)
+    plt.savefig(report_dir / f"{prefix}iou_curves.png", dpi=160)
     plt.close()
 
 

@@ -26,19 +26,21 @@ def required_paths(checkpoint_dir: Path, report_dir: Path) -> list[Path]:
         report_dir / "analysis" / "road_unet_error_contact_sheet.png",
     ]
     for experiment in EXPERIMENTS:
+        model_report_dir = report_dir / "by_model" / experiment
+        model_checkpoint_dir = checkpoint_dir / experiment
         paths.extend(
             [
-                checkpoint_dir / f"{experiment}_best.pt",
-                checkpoint_dir / f"{experiment}_last.pt",
-                report_dir / f"{experiment}_metrics.csv",
-                report_dir / f"{experiment}_summary.json",
-                report_dir / f"{experiment}_val_evaluation.json",
-                report_dir / f"{experiment}_val_threshold_sweep.csv",
-                report_dir / f"{experiment}_loss_curves.png",
-                report_dir / f"{experiment}_iou_curves.png",
-                report_dir / f"{experiment}_val_pr_curve.png",
-                report_dir / "qualitative_overlays" / experiment,
-                report_dir / "error_examples" / experiment,
+                model_checkpoint_dir / "best.pt",
+                model_checkpoint_dir / "last.pt",
+                model_report_dir / "metrics.csv",
+                model_report_dir / "summary.json",
+                model_report_dir / "val_evaluation.json",
+                model_report_dir / "val_threshold_sweep.csv",
+                model_report_dir / "loss_curves.png",
+                model_report_dir / "iou_curves.png",
+                model_report_dir / "val_pr_curve.png",
+                model_report_dir / "qualitative_overlays",
+                model_report_dir / "error_examples",
             ]
         )
     return paths
