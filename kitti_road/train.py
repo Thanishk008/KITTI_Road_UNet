@@ -18,6 +18,39 @@ from .utils import append_csv_row, load_config, load_json, save_json, set_seed, 
 from .visualize import plot_curves
 
 
+def apply_overrides(config: Dict[str, Any], args: argparse.Namespace) -> Dict[str, Any]:
+    training_cfg = config["training"]
+    data_cfg = config["data"]
+    outputs_cfg = config["outputs"]
+    if args.epochs is not None:
+        training_cfg["epochs"] = int(args.epochs)
+    if args.batch_size is not None:
+        training_cfg["batch_size"] = int(args.batch_size)
+    if args.num_workers is not None:
+        training_cfg["num_workers"] = int(args.num_workers)
+    if args.lr is not None:
+        training_cfg["lr"] = float(args.lr)
+    if args.weight_decay is not None:
+        training_cfg["weight_decay"] = float(args.weight_decay)
+    if args.save_every is not None:
+        training_cfg["save_every"] = int(args.save_every)
+    if args.threshold is not None:
+        training_cfg["threshold"] = float(args.threshold)
+    if args.amp:
+        training_cfg["amp"] = True
+    if args.no_amp:
+        training_cfg["amp"] = False
+    if args.image_size is not None:
+        data_cfg["image_size"] = [int(args.image_size[0]), int(args.image_size[1])]
+    if args.processed is not None:
+        data_cfg["processed"] = str(args.processed)
+    if args.checkpoint_dir is not None:
+        outputs_cfg["checkpoint_dir"] = str(args.checkpoint_dir)
+    if args.report_dir is not None:
+        outputs_cfg["report_dir"] = str(args.report_dir)
+    return config
+
+
 def make_loaders(config: Dict[str, Any], train: bool = True):
     data_cfg = config["data"]
     training_cfg = config["training"]
@@ -83,8 +116,10 @@ def save_checkpoint(path: Path, payload: Dict[str, Any]) -> None:
     torch.save(payload, path)
 
 
-def train(config_path: Path, resume: Path | None = None, cpu: bool = False) -> None:
+def train(config_path: Path, resume: Path | None = None, cpu: bool = False, overrides: argparse.Namespace | None = None) -> None:
     config = load_config(config_path)
+    if overrides is not None:
+        config = apply_overrides(config, overrides)
     set_seed(int(config["data"].get("seed", 6681)))
     device = torch.device("cuda" if torch.cuda.is_available() and not cpu else "cpu")
     use_amp = bool(config["training"].get("amp", True) and device.type == "cuda")
@@ -185,8 +220,21 @@ def main() -> None:
     parser.add_argument("--config", type=Path, required=True)
     parser.add_argument("--resume", type=Path)
     parser.add_argument("--cpu", action="store_true")
+    parser.add_argument("--epochs", type=int)
+    parser.add_argument("--batch-size", type=int)
+    parser.add_argument("--num-workers", type=int)
+    parser.add_argument("--lr", type=float)
+    parser.add_argument("--weight-decay", type=float)
+    parser.add_argument("--save-every", type=int)
+    parser.add_argument("--threshold", type=float)
+    parser.add_argument("--amp", action="store_true", help="Force AMP on when CUDA is available.")
+    parser.add_argument("--no-amp", action="store_true", help="Disable AMP even when config enables it.")
+    parser.add_argument("--image-size", type=int, nargs=2, metavar=("HEIGHT", "WIDTH"))
+    parser.add_argument("--processed", type=Path)
+    parser.add_argument("--checkpoint-dir", type=Path)
+    parser.add_argument("--report-dir", type=Path)
     args = parser.parse_args()
-    train(args.config, args.resume, args.cpu)
+    train(args.config, args.resume, args.cpu, args)
 
 
 if __name__ == "__main__":

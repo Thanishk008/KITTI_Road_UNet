@@ -110,6 +110,30 @@ python -m kitti_road.train --config configs/no_skip_unet.yaml
 python -m kitti_road.train --config configs/pretrained_resnet34_unet.yaml
 ```
 
+The YAML defaults are set for a normal Colab A100 run with `batch_size: 8` and `num_workers: 8`. Optional tuning overrides can still be passed without editing YAML:
+
+```bash
+python -m kitti_road.train --config configs/road_unet.yaml --batch-size 12
+python -m kitti_road.train --config configs/pretrained_resnet34_unet.yaml --batch-size 8 --lr 0.0001
+```
+
+Common override flags:
+
+```text
+--epochs
+--batch-size
+--num-workers
+--lr
+--weight-decay
+--save-every
+--threshold
+--amp / --no-amp
+--image-size HEIGHT WIDTH
+--processed
+--checkpoint-dir
+--report-dir
+```
+
 Evaluate:
 
 ```bash
