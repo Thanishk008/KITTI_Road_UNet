@@ -86,7 +86,7 @@ def build_model_comparison(report_dir: Path, out_dir: Path) -> list[dict[str, An
 def build_per_scenario_table(report_dir: Path, out_dir: Path) -> list[dict[str, Any]]:
     rows = []
     for experiment in EXPERIMENTS:
-        metrics = read_json(report_dir / "by_model" / experiment / "val_evaluation.json") or {}
+        metrics = read_json(report_dir / experiment / f"{experiment}_val_evaluation.json") or {}
         for scenario, values in (metrics.get("per_scenario") or {}).items():
             row = {"experiment": experiment, "model": DISPLAY_NAMES[experiment], "scenario": scenario}
             row.update({metric: format_float(values.get(metric)) for metric in ["iou", "dice", "precision", "recall", "pixel_accuracy"]})
@@ -106,7 +106,7 @@ def plot_combined_curves(report_dir: Path, out_dir: Path) -> None:
         plt.figure(figsize=(8, 5))
         wrote_any = False
         for experiment in EXPERIMENTS:
-            rows = read_csv_rows(report_dir / "by_model" / experiment / "metrics.csv")
+            rows = read_csv_rows(report_dir / experiment / f"{experiment}_metrics.csv")
             if not rows:
                 continue
             epochs = [int(row["epoch"]) for row in rows]
@@ -151,8 +151,8 @@ def make_contact_sheet(paths: list[Path], out_path: Path, thumb_width: int = 360
 
 
 def build_contact_sheets(report_dir: Path, out_dir: Path) -> None:
-    overlay_paths = sorted((report_dir / "by_model" / "road_unet" / "qualitative_overlays").glob("*.png"))
-    error_paths = sorted((report_dir / "by_model" / "road_unet" / "error_examples").glob("*.png"))
+    overlay_paths = sorted((report_dir / "qualitative_overlays" / "road_unet").glob("*.png"))
+    error_paths = sorted((report_dir / "error_examples" / "road_unet").glob("*.png"))
     make_contact_sheet(overlay_paths, out_dir / "road_unet_overlay_contact_sheet.png")
     make_contact_sheet(error_paths, out_dir / "road_unet_error_contact_sheet.png")
 

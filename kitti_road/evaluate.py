@@ -33,9 +33,8 @@ def save_error_map(prob: np.ndarray, target: np.ndarray, path: Path, threshold: 
 
 def write_qualitative_examples(model, dataset: KITTIRoadDataset, config, report_dir: Path, experiment: str, device, threshold: float, limit: int = 12) -> None:
     image_size = tuple(config["data"].get("image_size", [384, 1216]))
-    model_report_dir = report_dir / "by_model" / experiment
-    overlay_dir = model_report_dir / "qualitative_overlays"
-    error_dir = model_report_dir / "error_examples"
+    overlay_dir = report_dir / "qualitative_overlays" / experiment
+    error_dir = report_dir / "error_examples" / experiment
     overlay_dir.mkdir(parents=True, exist_ok=True)
     error_dir.mkdir(parents=True, exist_ok=True)
     model.eval()
@@ -85,19 +84,19 @@ def evaluate(checkpoint: Path, split: str = "val", cpu: bool = False) -> None:
     metrics["per_scenario"] = accumulator.per_scenario()
     report_dir = Path(config["outputs"]["report_dir"])
     experiment = config["experiment_name"]
-    model_report_dir = report_dir / "by_model" / experiment
-    save_json(metrics, model_report_dir / f"{split}_evaluation.json")
+    model_report_dir = report_dir / experiment
+    save_json(metrics, model_report_dir / f"{experiment}_{split}_evaluation.json")
 
     if accumulator.scores:
         scores = np.concatenate(accumulator.scores)
         labels = np.concatenate(accumulator.labels)
         rows = threshold_sweep(scores, labels)
-        sweep_path = model_report_dir / f"{split}_threshold_sweep.csv"
+        sweep_path = model_report_dir / f"{experiment}_{split}_threshold_sweep.csv"
         with sweep_path.open("w", newline="", encoding="utf-8") as handle:
             writer = csv.DictWriter(handle, fieldnames=list(rows[0].keys()))
             writer.writeheader()
             writer.writerows(rows)
-        plot_pr_curve(rows, model_report_dir, f"{split}")
+        plot_pr_curve(rows, model_report_dir, f"{experiment}_{split}")
 
     summary_path = report_dir / "experiment_summary.csv"
     summary_row = {

@@ -148,7 +148,7 @@ def make_pillow_figure(out: Path) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--out", type=Path, default=Path("reports/figures/residual_road_unet_graph.png"))
+    parser.add_argument("--out", type=Path, default=Path("reports/model_figure.png"))
     args = parser.parse_args()
     make_figure(args.out)
 

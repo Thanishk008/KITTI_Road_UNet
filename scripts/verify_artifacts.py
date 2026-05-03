@@ -11,7 +11,7 @@ def required_paths(checkpoint_dir: Path, report_dir: Path) -> list[Path]:
     paths: list[Path] = [
         report_dir / "mask_audit" / "mask_audit.json",
         report_dir / "mask_audit" / "mask_audit_preview.png",
-        report_dir / "figures" / "residual_road_unet_graph.png",
+        report_dir / "model_figure.png",
         report_dir / "experiment_summary.csv",
         report_dir / "a_plus_report_blueprint.md",
         report_dir / "analysis" / "model_comparison.csv",
@@ -26,21 +26,21 @@ def required_paths(checkpoint_dir: Path, report_dir: Path) -> list[Path]:
         report_dir / "analysis" / "road_unet_error_contact_sheet.png",
     ]
     for experiment in EXPERIMENTS:
-        model_report_dir = report_dir / "by_model" / experiment
+        model_report_dir = report_dir / experiment
         model_checkpoint_dir = checkpoint_dir / experiment
         paths.extend(
             [
                 model_checkpoint_dir / "best.pt",
                 model_checkpoint_dir / "last.pt",
-                model_report_dir / "metrics.csv",
-                model_report_dir / "summary.json",
-                model_report_dir / "val_evaluation.json",
-                model_report_dir / "val_threshold_sweep.csv",
-                model_report_dir / "loss_curves.png",
-                model_report_dir / "iou_curves.png",
-                model_report_dir / "val_pr_curve.png",
-                model_report_dir / "qualitative_overlays",
-                model_report_dir / "error_examples",
+                model_report_dir / f"{experiment}_metrics.csv",
+                model_report_dir / f"{experiment}_summary.json",
+                model_report_dir / f"{experiment}_val_evaluation.json",
+                model_report_dir / f"{experiment}_val_threshold_sweep.csv",
+                model_report_dir / f"{experiment}_loss_curves.png",
+                model_report_dir / f"{experiment}_iou_curves.png",
+                model_report_dir / f"{experiment}_val_pr_curve.png",
+                report_dir / "qualitative_overlays" / experiment,
+                report_dir / "error_examples" / experiment,
             ]
         )
     return paths

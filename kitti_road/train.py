@@ -138,8 +138,8 @@ def train(config_path: Path, resume: Path | None = None, cpu: bool = False, over
     experiment_name = config["experiment_name"]
     checkpoint_dir = Path(config["outputs"]["checkpoint_dir"]) / experiment_name
     report_dir = Path(config["outputs"]["report_dir"])
-    model_report_dir = report_dir / "by_model" / experiment_name
-    metrics_path = model_report_dir / "metrics.csv"
+    model_report_dir = report_dir / experiment_name
+    metrics_path = model_report_dir / f"{experiment_name}_metrics.csv"
     split_data = load_json(Path(config["data"]["processed"]) / "split.json")
     split_hash = stable_hash(split_data)
 
@@ -213,8 +213,8 @@ def train(config_path: Path, resume: Path | None = None, cpu: bool = False, over
         if int(config["training"].get("save_every", 10)) > 0 and epoch % int(config["training"].get("save_every", 10)) == 0:
             save_checkpoint(checkpoint_dir / f"epoch_{epoch:03d}.pt", payload)
 
-    plot_curves(rows, model_report_dir, experiment_name="")
-    save_json({"experiment": experiment_name, "best_iou": best_iou, "metrics_csv": str(metrics_path)}, model_report_dir / "summary.json")
+    plot_curves(rows, model_report_dir, experiment_name=experiment_name)
+    save_json({"experiment": experiment_name, "best_iou": best_iou, "metrics_csv": str(metrics_path)}, model_report_dir / f"{experiment_name}_summary.json")
 
 
 def main() -> None:

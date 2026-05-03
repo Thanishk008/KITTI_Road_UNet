@@ -95,22 +95,22 @@ This runs the full long-running pipeline: CUDA check, mask audit, split preparat
 
 ## Output Layout
 
-Per-model outputs are organized under:
+Per-model outputs are organized directly under `reports/`:
 
 ```text
 checkpoints/<experiment>/
-reports/by_model/<experiment>/
+reports/<experiment>/
 ```
 
 Example:
 
 ```text
 checkpoints/road_unet/best.pt
-reports/by_model/road_unet/metrics.csv
-reports/by_model/road_unet/val_evaluation.json
-reports/by_model/road_unet/loss_curves.png
-reports/by_model/road_unet/qualitative_overlays/
-reports/by_model/road_unet/error_examples/
+reports/road_unet/road_unet_metrics.csv
+reports/road_unet/road_unet_val_evaluation.json
+reports/road_unet/road_unet_loss_curves.png
+reports/qualitative_overlays/road_unet/
+reports/error_examples/road_unet/
 ```
 
 Combined report outputs:
