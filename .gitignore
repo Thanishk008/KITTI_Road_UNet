@@ -11,6 +11,7 @@ __pycache__/
 # Notebook and Colab noise
 .ipynb_checkpoints/
 *.ipynb_checkpoints/
+esi_6684_final_project.py
 
 # Local environment files
 .env
@@ -43,9 +44,7 @@ reports/predictions/
 reports/qualitative_overlays/
 reports/error_examples/
 !reports/.gitkeep
-!reports/a_plus_report_blueprint.md
-!reports/figures/
-!reports/figures/residual_road_unet_graph.png
+!reports/report_blueprint.md
 
 # Experiment trackers and logs
 wandb/

@@ -9,7 +9,7 @@ Deep learning project for **ESI6681 Image Segmentation with U-Net**. The project
 - Baseline: `PlainUNet`.
 - Ablation: `NoSkipUNet`.
 - KITTI mask audit, deterministic train/validation split, checkpoints, metrics, curves, PR sweeps, overlays, error maps, and report-ready analysis.
-- Report source-of-truth: `reports/a_plus_report_blueprint.md`.
+- Report source-of-truth: `reports/report_blueprint.md`.
 
 ## Required Experiments
 
@@ -107,8 +107,10 @@ Example:
 ```text
 checkpoints/road_unet/road_unet_best.pt
 reports/road_unet/road_unet_metrics.csv
-reports/road_unet/road_unet_val_evaluation.json
 reports/road_unet/road_unet_loss_curves.png
+reports/analysis/road_unet/road_unet_val_evaluation.json
+reports/analysis/road_unet/road_unet_val_threshold_sweep.csv
+reports/analysis/road_unet/road_unet_val_pr_curve.png
 reports/qualitative_overlays/road_unet/
 reports/error_examples/road_unet/
 ```
@@ -124,12 +126,11 @@ reports/analysis/combined_train_loss.png
 reports/analysis/combined_val_loss.png
 reports/analysis/combined_iou.png
 reports/analysis/combined_dice.png
-reports/analysis/road_unet_overlay_contact_sheet.png
-reports/analysis/road_unet_error_contact_sheet.png
-reports/analysis/plain_unet_overlay_contact_sheet.png
-reports/analysis/plain_unet_error_contact_sheet.png
-reports/analysis/no_skip_unet_overlay_contact_sheet.png
-reports/analysis/no_skip_unet_error_contact_sheet.png
+reports/analysis/<experiment>/<experiment>_val_evaluation.json
+reports/analysis/<experiment>/<experiment>_val_threshold_sweep.csv
+reports/analysis/<experiment>/<experiment>_val_pr_curve.png
+reports/analysis/<experiment>/<experiment>_overlay_contact_sheet.png
+reports/analysis/<experiment>/<experiment>_error_contact_sheet.png
 ```
 
 ## Scripts

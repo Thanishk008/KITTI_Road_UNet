@@ -14,8 +14,8 @@ from .datasets import KITTIRoadDataset, image_to_tensor, mask_to_binary, resize_
 from .losses import BCEDiceLoss
 from .metrics import MetricAccumulator, threshold_sweep
 from .models import build_model
-from .utils import append_csv_row
 from .utils import save_json
+from .utils import upsert_csv_row
 from .visualize import plot_pr_curve, road_overlay
 
 
@@ -84,19 +84,20 @@ def evaluate(checkpoint: Path, split: str = "val", cpu: bool = False) -> None:
     metrics["per_scenario"] = accumulator.per_scenario()
     report_dir = Path(config["outputs"]["report_dir"])
     experiment = config["experiment_name"]
-    model_report_dir = report_dir / experiment
-    save_json(metrics, model_report_dir / f"{experiment}_{split}_evaluation.json")
+    model_analysis_dir = report_dir / "analysis" / experiment
+    save_json(metrics, model_analysis_dir / f"{experiment}_{split}_evaluation.json")
 
     if accumulator.scores:
         scores = np.concatenate(accumulator.scores)
         labels = np.concatenate(accumulator.labels)
         rows = threshold_sweep(scores, labels)
-        sweep_path = model_report_dir / f"{experiment}_{split}_threshold_sweep.csv"
+        sweep_path = model_analysis_dir / f"{experiment}_{split}_threshold_sweep.csv"
+        sweep_path.parent.mkdir(parents=True, exist_ok=True)
         with sweep_path.open("w", newline="", encoding="utf-8") as handle:
             writer = csv.DictWriter(handle, fieldnames=list(rows[0].keys()))
             writer.writeheader()
             writer.writerows(rows)
-        plot_pr_curve(rows, model_report_dir, f"{experiment}_{split}")
+        plot_pr_curve(rows, model_analysis_dir, f"{experiment}_{split}")
 
     summary_path = report_dir / "experiment_summary.csv"
     summary_row = {
@@ -112,7 +113,7 @@ def evaluate(checkpoint: Path, split: str = "val", cpu: bool = False) -> None:
         "max_f": round(metrics["max_f"], 6),
         "loss": round(metrics["loss"], 6),
     }
-    append_csv_row(summary_path, summary_row, list(summary_row.keys()))
+    upsert_csv_row(summary_path, summary_row, list(summary_row.keys()), key_fields=["experiment", "split"])
     write_qualitative_examples(model, dataset, config, report_dir, experiment, device, threshold)
 
     print(metrics)

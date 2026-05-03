@@ -60,5 +60,25 @@ def append_csv_row(path: str | Path, row: Dict[str, Any], fieldnames: list[str])
         writer.writerow(row)
 
 
+def upsert_csv_row(path: str | Path, row: Dict[str, Any], fieldnames: list[str], key_fields: list[str]) -> None:
+    import csv
+
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    rows: list[Dict[str, Any]] = []
+    if path.exists():
+        with path.open("r", newline="", encoding="utf-8") as handle:
+            rows = list(csv.DictReader(handle))
+
+    key = tuple(str(row.get(field, "")) for field in key_fields)
+    filtered = [existing for existing in rows if tuple(str(existing.get(field, "")) for field in key_fields) != key]
+    filtered.append(row)
+
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(filtered)
+
+
 def device_from_config(cpu: bool = False) -> torch.device:
     return torch.device("cuda" if torch.cuda.is_available() and not cpu else "cpu")

@@ -61,7 +61,7 @@ def main() -> None:
         run([sys.executable, "-m", "kitti_road.evaluate", "--checkpoint", checkpoint, "--split", "val"])
 
     run([sys.executable, "scripts/summarize_analysis.py", "--report-dir", str(args.reports), "--processed-dir", str(args.processed)])
-    run([sys.executable, "scripts/verify_artifacts.py"])
+    run([sys.executable, "scripts/verify_artifacts.py", "--report-dir", str(args.reports)])
 
 
 if __name__ == "__main__":

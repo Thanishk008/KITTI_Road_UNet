@@ -86,7 +86,7 @@ def build_model_comparison(report_dir: Path, out_dir: Path) -> list[dict[str, An
 def build_per_scenario_table(report_dir: Path, out_dir: Path) -> list[dict[str, Any]]:
     rows = []
     for experiment in EXPERIMENTS:
-        metrics = read_json(report_dir / experiment / f"{experiment}_val_evaluation.json") or {}
+        metrics = read_json(out_dir / experiment / f"{experiment}_val_evaluation.json") or {}
         for scenario, values in (metrics.get("per_scenario") or {}).items():
             row = {"experiment": experiment, "model": DISPLAY_NAMES[experiment], "scenario": scenario}
             row.update({metric: format_float(values.get(metric)) for metric in ["iou", "dice", "precision", "recall", "pixel_accuracy"]})
@@ -150,12 +150,21 @@ def make_contact_sheet(paths: list[Path], out_path: Path, thumb_width: int = 360
     canvas.save(out_path)
 
 
-def build_contact_sheets(report_dir: Path, out_dir: Path) -> None:
+def build_contact_sheets(report_dir: Path, out_dir: Path) -> dict[str, dict[str, str]]:
+    contact_sheets: dict[str, dict[str, str]] = {}
     for experiment in EXPERIMENTS:
         overlay_paths = sorted((report_dir / "qualitative_overlays" / experiment).glob("*.png"))
         error_paths = sorted((report_dir / "error_examples" / experiment).glob("*.png"))
-        make_contact_sheet(overlay_paths, out_dir / f"{experiment}_overlay_contact_sheet.png")
-        make_contact_sheet(error_paths, out_dir / f"{experiment}_error_contact_sheet.png")
+        model_analysis_dir = out_dir / experiment
+        overlay_sheet = model_analysis_dir / f"{experiment}_overlay_contact_sheet.png"
+        error_sheet = model_analysis_dir / f"{experiment}_error_contact_sheet.png"
+        make_contact_sheet(overlay_paths, overlay_sheet)
+        make_contact_sheet(error_paths, error_sheet)
+        contact_sheets[experiment] = {
+            "overlays": str(overlay_sheet),
+            "errors": str(error_sheet),
+        }
+    return contact_sheets
 
 
 def summarize(report_dir: Path, processed_dir: Path) -> None:
@@ -164,7 +173,7 @@ def summarize(report_dir: Path, processed_dir: Path) -> None:
     comparison = build_model_comparison(report_dir, out_dir)
     per_scenario = build_per_scenario_table(report_dir, out_dir)
     plot_combined_curves(report_dir, out_dir)
-    build_contact_sheets(report_dir, out_dir)
+    contact_sheets = build_contact_sheets(report_dir, out_dir)
 
     report_numbers = {
         "model_comparison": comparison,
@@ -176,13 +185,7 @@ def summarize(report_dir: Path, processed_dir: Path) -> None:
             "model_comparison_markdown": str(out_dir / "model_comparison.md"),
             "per_scenario_metrics_csv": str(out_dir / "per_scenario_metrics.csv"),
             "combined_plots_dir": str(out_dir),
-            "contact_sheets": {
-                experiment: {
-                    "overlays": str(out_dir / f"{experiment}_overlay_contact_sheet.png"),
-                    "errors": str(out_dir / f"{experiment}_error_contact_sheet.png"),
-                }
-                for experiment in EXPERIMENTS
-            },
+            "contact_sheets": contact_sheets,
         },
     }
     write_json(report_numbers, out_dir / "report_numbers.json")
