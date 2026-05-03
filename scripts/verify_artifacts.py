@@ -4,7 +4,7 @@ import argparse
 from pathlib import Path
 
 
-EXPERIMENTS = ["road_unet", "plain_unet", "no_skip_unet", "pretrained_resnet34_unet"]
+EXPERIMENTS = ["road_unet", "plain_unet", "no_skip_unet"]
 
 
 def required_paths(checkpoint_dir: Path, report_dir: Path) -> list[Path]:

@@ -10,14 +10,12 @@ CONFIGS = [
     "configs/road_unet.yaml",
     "configs/plain_unet.yaml",
     "configs/no_skip_unet.yaml",
-    "configs/pretrained_resnet34_unet.yaml",
 ]
 
 CHECKPOINTS = [
     "checkpoints/road_unet/best.pt",
     "checkpoints/plain_unet/best.pt",
     "checkpoints/no_skip_unet/best.pt",
-    "checkpoints/pretrained_resnet34_unet/best.pt",
 ]
 
 
@@ -28,12 +26,10 @@ def run(command: list[str]) -> None:
 
 def check_runtime(allow_cpu: bool) -> None:
     import torch
-    import torchvision
 
     print(
         {
             "torch": torch.__version__,
-            "torchvision": torchvision.__version__,
             "cuda_available": torch.cuda.is_available(),
             "device": torch.cuda.get_device_name(0) if torch.cuda.is_available() else "CPU",
         },

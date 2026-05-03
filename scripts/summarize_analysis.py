@@ -10,12 +10,11 @@ import matplotlib.pyplot as plt
 from PIL import Image
 
 
-EXPERIMENTS = ["road_unet", "plain_unet", "no_skip_unet", "pretrained_resnet34_unet"]
+EXPERIMENTS = ["road_unet", "plain_unet", "no_skip_unet"]
 DISPLAY_NAMES = {
     "road_unet": "Residual U-Net",
     "plain_unet": "Plain U-Net",
     "no_skip_unet": "No-skip U-Net",
-    "pretrained_resnet34_unet": "Pretrained ResNet34 U-Net",
 }
 METRIC_COLUMNS = ["iou", "dice", "precision", "recall", "pixel_accuracy", "ap", "max_f", "loss"]
 
