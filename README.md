@@ -124,6 +124,12 @@ reports/analysis/combined_train_loss.png
 reports/analysis/combined_val_loss.png
 reports/analysis/combined_iou.png
 reports/analysis/combined_dice.png
+reports/analysis/road_unet_overlay_contact_sheet.png
+reports/analysis/road_unet_error_contact_sheet.png
+reports/analysis/plain_unet_overlay_contact_sheet.png
+reports/analysis/plain_unet_error_contact_sheet.png
+reports/analysis/no_skip_unet_overlay_contact_sheet.png
+reports/analysis/no_skip_unet_error_contact_sheet.png
 ```
 
 ## Scripts

@@ -151,10 +151,11 @@ def make_contact_sheet(paths: list[Path], out_path: Path, thumb_width: int = 360
 
 
 def build_contact_sheets(report_dir: Path, out_dir: Path) -> None:
-    overlay_paths = sorted((report_dir / "qualitative_overlays" / "road_unet").glob("*.png"))
-    error_paths = sorted((report_dir / "error_examples" / "road_unet").glob("*.png"))
-    make_contact_sheet(overlay_paths, out_dir / "road_unet_overlay_contact_sheet.png")
-    make_contact_sheet(error_paths, out_dir / "road_unet_error_contact_sheet.png")
+    for experiment in EXPERIMENTS:
+        overlay_paths = sorted((report_dir / "qualitative_overlays" / experiment).glob("*.png"))
+        error_paths = sorted((report_dir / "error_examples" / experiment).glob("*.png"))
+        make_contact_sheet(overlay_paths, out_dir / f"{experiment}_overlay_contact_sheet.png")
+        make_contact_sheet(error_paths, out_dir / f"{experiment}_error_contact_sheet.png")
 
 
 def summarize(report_dir: Path, processed_dir: Path) -> None:
@@ -175,6 +176,13 @@ def summarize(report_dir: Path, processed_dir: Path) -> None:
             "model_comparison_markdown": str(out_dir / "model_comparison.md"),
             "per_scenario_metrics_csv": str(out_dir / "per_scenario_metrics.csv"),
             "combined_plots_dir": str(out_dir),
+            "contact_sheets": {
+                experiment: {
+                    "overlays": str(out_dir / f"{experiment}_overlay_contact_sheet.png"),
+                    "errors": str(out_dir / f"{experiment}_error_contact_sheet.png"),
+                }
+                for experiment in EXPERIMENTS
+            },
         },
     }
     write_json(report_numbers, out_dir / "report_numbers.json")
