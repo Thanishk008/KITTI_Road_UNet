@@ -69,13 +69,13 @@ Train and evaluate each model:
 
 ```bash
 !python -m kitti_road.train --config configs/road_unet.yaml --batch-size 16 --num-workers 8 --lr 0.0005 --amp
-!python -m kitti_road.evaluate --checkpoint checkpoints/road_unet/best.pt --split val
+!python -m kitti_road.evaluate --checkpoint checkpoints/road_unet/road_unet_best.pt --split val
 
 !python -m kitti_road.train --config configs/plain_unet.yaml --batch-size 16 --num-workers 8 --lr 0.0005 --amp
-!python -m kitti_road.evaluate --checkpoint checkpoints/plain_unet/best.pt --split val
+!python -m kitti_road.evaluate --checkpoint checkpoints/plain_unet/plain_unet_best.pt --split val
 
 !python -m kitti_road.train --config configs/no_skip_unet.yaml --batch-size 16 --num-workers 8 --lr 0.0005 --amp
-!python -m kitti_road.evaluate --checkpoint checkpoints/no_skip_unet/best.pt --split val
+!python -m kitti_road.evaluate --checkpoint checkpoints/no_skip_unet/no_skip_unet_best.pt --split val
 ```
 
 Generate final analysis:
@@ -105,7 +105,7 @@ reports/<experiment>/
 Example:
 
 ```text
-checkpoints/road_unet/best.pt
+checkpoints/road_unet/road_unet_best.pt
 reports/road_unet/road_unet_metrics.csv
 reports/road_unet/road_unet_val_evaluation.json
 reports/road_unet/road_unet_loss_curves.png

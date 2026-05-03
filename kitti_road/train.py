@@ -204,14 +204,14 @@ def train(config_path: Path, resume: Path | None = None, cpu: bool = False, over
         print(row)
 
         payload = checkpoint_payload(model, optimizer, scheduler, config, epoch, best_iou, val, split_hash)
-        save_checkpoint(checkpoint_dir / "last.pt", payload)
+        save_checkpoint(checkpoint_dir / f"{experiment_name}_last.pt", payload)
         if val["iou"] > best_iou:
             best_iou = float(val["iou"])
             payload["best_metric"] = best_iou
-            save_checkpoint(checkpoint_dir / "best.pt", payload)
-            print(f"saved best checkpoint: {checkpoint_dir / 'best.pt'} iou={best_iou:.4f}")
+            save_checkpoint(checkpoint_dir / f"{experiment_name}_best.pt", payload)
+            print(f"saved best checkpoint: {checkpoint_dir / f'{experiment_name}_best.pt'} iou={best_iou:.4f}")
         if int(config["training"].get("save_every", 10)) > 0 and epoch % int(config["training"].get("save_every", 10)) == 0:
-            save_checkpoint(checkpoint_dir / f"epoch_{epoch:03d}.pt", payload)
+            save_checkpoint(checkpoint_dir / f"{experiment_name}_epoch_{epoch:03d}.pt", payload)
 
     plot_curves(rows, model_report_dir, experiment_name=experiment_name)
     save_json({"experiment": experiment_name, "best_iou": best_iou, "metrics_csv": str(metrics_path)}, model_report_dir / f"{experiment_name}_summary.json")

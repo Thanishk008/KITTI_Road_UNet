@@ -13,9 +13,9 @@ CONFIGS = [
 ]
 
 CHECKPOINTS = [
-    "checkpoints/road_unet/best.pt",
-    "checkpoints/plain_unet/best.pt",
-    "checkpoints/no_skip_unet/best.pt",
+    "checkpoints/road_unet/road_unet_best.pt",
+    "checkpoints/plain_unet/plain_unet_best.pt",
+    "checkpoints/no_skip_unet/no_skip_unet_best.pt",
 ]
 
 
