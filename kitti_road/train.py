@@ -116,6 +116,19 @@ def save_checkpoint(path: Path, payload: Dict[str, Any]) -> None:
     torch.save(payload, path)
 
 
+def format_epoch_summary(row: Dict[str, Any]) -> str:
+    return (
+        f"epoch {row['epoch']:03d} | "
+        f"train_loss={row['train_loss']:.4f} "
+        f"val_loss={row['val_loss']:.4f} "
+        f"iou={row['iou']:.4f} "
+        f"dice={row['dice']:.4f} "
+        f"ap={row['ap']:.4f} "
+        f"max_f={row['max_f']:.4f} "
+        f"seconds={row['seconds']:.1f}"
+    )
+
+
 def train(config_path: Path, resume: Path | None = None, cpu: bool = False, overrides: argparse.Namespace | None = None) -> None:
     config = load_config(config_path)
     if overrides is not None:
@@ -152,15 +165,11 @@ def train(config_path: Path, resume: Path | None = None, cpu: bool = False, over
         best_iou = float(payload.get("best_metric", -1.0))
 
     print(
-        {
-            "experiment": experiment_name,
-            "model": config["model"],
-            "device": str(device),
-            "amp": use_amp,
-            "train_samples": len(train_loader.dataset),
-            "val_samples": len(val_loader.dataset),
-            "split_hash": split_hash,
-        }
+        f"training {experiment_name} | model={config['model']['name']} | "
+        f"device={device} | amp={use_amp} | "
+        f"train={len(train_loader.dataset)} val={len(val_loader.dataset)} | "
+        f"split={split_hash}",
+        flush=True,
     )
 
     rows = []
@@ -201,7 +210,7 @@ def train(config_path: Path, resume: Path | None = None, cpu: bool = False, over
         }
         append_csv_row(metrics_path, row, fieldnames)
         rows.append(row)
-        print(row)
+        print(format_epoch_summary(row), flush=True)
 
         payload = checkpoint_payload(model, optimizer, scheduler, config, epoch, best_iou, val, split_hash)
         save_checkpoint(checkpoint_dir / f"{experiment_name}_last.pt", payload)
