@@ -21,7 +21,7 @@ plain_unet
 no_skip_unet
 ```
 
-This keeps the project aligned with the course U-Net topic and avoids shifting the grading focus to pretrained fine-tuning. The experiment rubric is covered by a real-world baseline comparison, a skip/residual ablation, quantitative metrics, qualitative analysis, and detailed dataset/training documentation.
+This keeps the project aligned with the course U-Net topic and the lean three-model experiment package. The experiment rubric is covered by a real-world baseline comparison, a skip/residual ablation, quantitative metrics, qualitative analysis, and detailed dataset/training documentation.
 
 ## Data
 
@@ -68,13 +68,13 @@ Run manually to manage compute:
 Train and evaluate each model:
 
 ```bash
-!python -m kitti_road.train --config configs/road_unet.yaml --batch-size 16 --num-workers 8 --lr 0.0005 --amp
+!python -m kitti_road.train --config configs/road_unet.yaml --batch-size 32 --num-workers 8 --lr 0.0005 --amp
 !python -m kitti_road.evaluate --checkpoint checkpoints/road_unet/road_unet_best.pt --split val
 
-!python -m kitti_road.train --config configs/plain_unet.yaml --batch-size 16 --num-workers 8 --lr 0.0005 --amp
+!python -m kitti_road.train --config configs/plain_unet.yaml --batch-size 32 --num-workers 8 --lr 0.0005 --amp
 !python -m kitti_road.evaluate --checkpoint checkpoints/plain_unet/plain_unet_best.pt --split val
 
-!python -m kitti_road.train --config configs/no_skip_unet.yaml --batch-size 16 --num-workers 8 --lr 0.0005 --amp
+!python -m kitti_road.train --config configs/no_skip_unet.yaml --batch-size 32 --num-workers 8 --lr 0.0005 --amp
 !python -m kitti_road.evaluate --checkpoint checkpoints/no_skip_unet/no_skip_unet_best.pt --split val
 ```
 
@@ -88,7 +88,7 @@ Generate final analysis:
 The one-command version is available if you want it:
 
 ```bash
-!python scripts/run_everything.py --data "{DATA_ROAD}"
+!python scripts/run_everything.py --data "{DATA_ROAD}" --processed data/processed/kitti_road --reports reports --checkpoint-dir checkpoints --batch-size 32 --num-workers 8 --lr 0.0005 --amp
 ```
 
 This runs the full long-running pipeline: CUDA check, mask audit, split preparation, figure generation, all three model trainings, evaluation, analysis generation, and artifact verification.

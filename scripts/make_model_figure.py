@@ -4,6 +4,9 @@ import argparse
 from pathlib import Path
 
 try:
+    import matplotlib
+
+    matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 except ImportError:  # pragma: no cover - exercised only in minimal environments

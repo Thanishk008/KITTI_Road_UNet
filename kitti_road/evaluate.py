@@ -54,9 +54,13 @@ def write_qualitative_examples(model, dataset: KITTIRoadDataset, config, report_
             save_error_map(prob_original, target_original, error_dir / f"{item['id']}_errors.png", threshold)
 
 
-def evaluate(checkpoint: Path, split: str = "val", cpu: bool = False) -> None:
+def evaluate(checkpoint: Path, split: str = "val", cpu: bool = False, processed: Path | None = None, report_dir_override: Path | None = None) -> None:
     payload = torch.load(checkpoint, map_location="cpu")
     config = payload["config"]
+    if processed is not None:
+        config["data"]["processed"] = str(processed)
+    if report_dir_override is not None:
+        config["outputs"]["report_dir"] = str(report_dir_override)
     device = torch.device("cuda" if torch.cuda.is_available() and not cpu else "cpu")
     model = build_model(config["model"]).to(device)
     model.load_state_dict(payload["model_state"])
@@ -124,8 +128,10 @@ def main() -> None:
     parser.add_argument("--checkpoint", type=Path, required=True)
     parser.add_argument("--split", choices=["train", "val"], default="val")
     parser.add_argument("--cpu", action="store_true")
+    parser.add_argument("--processed", type=Path, help="Override processed split directory from checkpoint config.")
+    parser.add_argument("--report-dir", type=Path, help="Override report output directory from checkpoint config.")
     args = parser.parse_args()
-    evaluate(args.checkpoint, args.split, args.cpu)
+    evaluate(args.checkpoint, args.split, args.cpu, args.processed, args.report_dir)
 
 
 if __name__ == "__main__":
