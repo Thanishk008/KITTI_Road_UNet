@@ -47,7 +47,7 @@ def required_paths(checkpoint_dir: Path, report_dir: Path) -> list[Path]:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Verify that all A-level submission artifacts exist.")
+    parser = argparse.ArgumentParser(description="Verify that all required experiment artifacts exist.")
     parser.add_argument("--checkpoint-dir", type=Path, default=Path("checkpoints"))
     parser.add_argument("--report-dir", type=Path, default=Path("reports"))
     args = parser.parse_args()

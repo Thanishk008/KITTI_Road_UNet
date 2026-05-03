@@ -15,6 +15,7 @@ def group_norm(channels: int, requested_groups: int = 8) -> nn.GroupNorm:
 
 
 class ConvBlock(nn.Module):
+    # Standard two-conv block used by PlainUNet and NoSkipUNet.
     def __init__(self, in_channels: int, out_channels: int, groups: int = 8):
         super().__init__()
         self.net = nn.Sequential(
@@ -31,6 +32,7 @@ class ConvBlock(nn.Module):
 
 
 class ResidualBlock(nn.Module):
+    # Residual two-conv block used by ResidualRoadUNet.
     def __init__(self, in_channels: int, out_channels: int, groups: int = 8):
         super().__init__()
         self.conv1 = nn.Conv2d(in_channels, out_channels, 3, padding=1, bias=False)
@@ -114,16 +116,19 @@ class UNetBase(nn.Module):
 
 
 class PlainUNet(UNetBase):
+    # Plain U-Net: standard conv blocks with skip connections.
     def __init__(self, base_channels: int = 32, depth: int = 4, group_norm_groups: int = 8):
         super().__init__(base_channels, depth, group_norm_groups, ConvBlock, use_skip=True)
 
 
 class NoSkipUNet(UNetBase):
+    # No-skip U-Net: standard conv blocks without decoder skip concatenations.
     def __init__(self, base_channels: int = 32, depth: int = 4, group_norm_groups: int = 8):
         super().__init__(base_channels, depth, group_norm_groups, ConvBlock, use_skip=False)
 
 
 class ResidualRoadUNet(UNetBase):
+    # Residual U-Net: residual blocks with skip connections.
     def __init__(self, base_channels: int = 32, depth: int = 4, group_norm_groups: int = 8):
         super().__init__(base_channels, depth, group_norm_groups, ResidualBlock, use_skip=True)
 

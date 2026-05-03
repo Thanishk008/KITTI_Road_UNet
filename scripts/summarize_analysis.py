@@ -196,7 +196,7 @@ def summarize(report_dir: Path, processed_dir: Path) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Create report-ready analysis tables and combined plots.")
+    parser = argparse.ArgumentParser(description="Create analysis tables and combined plots.")
     parser.add_argument("--report-dir", type=Path, default=Path("reports"))
     parser.add_argument("--processed-dir", type=Path, default=Path("data/processed/kitti_road"))
     args = parser.parse_args()

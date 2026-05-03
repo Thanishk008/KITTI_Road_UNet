@@ -32,7 +32,7 @@ def check_runtime(allow_cpu: bool) -> None:
         flush=True,
     )
     if not torch.cuda.is_available() and not allow_cpu:
-        raise SystemExit("CUDA GPU is required for the full Colab A100 pipeline. Reconnect with a GPU runtime or pass --allow-cpu for debugging only.")
+        raise SystemExit("CUDA GPU is required for the full experiment pipeline. Reconnect with a GPU runtime or pass --allow-cpu for debugging only.")
 
 
 def train_command(config: str, args: argparse.Namespace) -> list[str]:
@@ -58,7 +58,7 @@ def train_command(config: str, args: argparse.Namespace) -> list[str]:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Run the complete Colab A100 experiment pipeline.")
+    parser = argparse.ArgumentParser(description="Run the complete experiment pipeline.")
     parser.add_argument("--data", type=Path, default=Path("/content/data/data_road"), help="Path to unzipped KITTI data_road directory.")
     parser.add_argument("--processed", type=Path, default=Path("data/processed/kitti_road"))
     parser.add_argument("--reports", type=Path, default=Path("reports"))

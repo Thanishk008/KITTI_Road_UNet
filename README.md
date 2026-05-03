@@ -8,8 +8,7 @@ Deep learning project for **ESI6681 Image Segmentation with U-Net**. The project
 - Main model: `ResidualRoadUNet`.
 - Baseline: `PlainUNet`.
 - Ablation: `NoSkipUNet`.
-- KITTI mask audit, deterministic train/validation split, checkpoints, metrics, curves, PR sweeps, overlays, error maps, and report-ready analysis.
-- Report source-of-truth: `reports/report_blueprint.md`.
+- KITTI mask audit, deterministic train/validation split, checkpoints, metrics, curves, PR sweeps, overlays, error maps, and final analysis artifacts.
 
 ## Required Experiments
 
@@ -21,7 +20,7 @@ plain_unet
 no_skip_unet
 ```
 
-This keeps the project aligned with the course U-Net topic and the lean three-model experiment package. The experiment rubric is covered by a real-world baseline comparison, a skip/residual ablation, quantitative metrics, qualitative analysis, and detailed dataset/training documentation.
+These three experiments provide the main model, a baseline, and a skip-connection ablation under matched training conditions.
 
 ## Data
 
@@ -42,7 +41,7 @@ data_road/
 
 The public KITTI test split has no labels, so this project evaluates on a deterministic validation split from the labeled training set.
 
-## Google Colab A100 Workflow
+## Colab GPU Workflow
 
 Select a CUDA GPU runtime first:
 
@@ -85,7 +84,7 @@ Generate final analysis:
 !python scripts/verify_artifacts.py
 ```
 
-The one-command version is available if you want it:
+You can also run the full pipeline with one command:
 
 ```bash
 !python scripts/run_everything.py --data "{DATA_ROAD}" --processed data/processed/kitti_road --reports reports --checkpoint-dir checkpoints --batch-size 32 --num-workers 8 --lr 0.0005 --amp
@@ -138,10 +137,6 @@ reports/analysis/<experiment>/<experiment>_error_contact_sheet.png
 - `audit_kitti_masks.py`: verifies KITTI label colors before training.
 - `prepare_kitti_road.py`: creates deterministic train/validation split.
 - `make_model_figure.py`: generates the original method figure.
-- `run_everything.py`: optional one-command Colab A100 workflow.
-- `summarize_analysis.py`: creates report-ready comparison tables, combined curves, and qualitative contact sheets.
+- `run_everything.py`: optional one-command experiment pipeline.
+- `summarize_analysis.py`: creates comparison tables, combined curves, and qualitative contact sheets.
 - `verify_artifacts.py`: checks final required outputs.
-
-## Submission Safety
-
-Large files are ignored by `.gitignore`: raw/processed data, checkpoints, logs, zips, generated CSV/JSON/PNG report artifacts, notebook checkpoints, and cache folders. Keep source code, configs, README files, `.env.example`, and the A+ blueprint tracked.
