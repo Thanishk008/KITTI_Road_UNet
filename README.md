@@ -22,6 +22,62 @@ no_skip_unet
 
 These three experiments provide the main model, a baseline, and a skip-connection ablation under matched training conditions.
 
+## Repository Tree
+
+Current high-level repo layout:
+
+```text
+KITTI_Road_UNet/
+├── checkpoints/
+│   ├── no_skip_unet/
+│   ├── plain_unet/
+│   ├── road_unet/
+│   └── .gitkeep
+├── configs/
+│   ├── no_skip_unet.yaml
+│   ├── plain_unet.yaml
+│   └── road_unet.yaml
+├── data/
+│   ├── data_road/
+│   ├── processed/
+│   └── README.md
+├── kitti_road/
+│   ├── __init__.py
+│   ├── datasets.py
+│   ├── evaluate.py
+│   ├── losses.py
+│   ├── metrics.py
+│   ├── models.py
+│   ├── predict.py
+│   ├── train.py
+│   ├── utils.py
+│   └── visualize.py
+├── reports/
+│   ├── analysis/
+│   ├── error_examples/
+│   ├── mask_audit/
+│   ├── no_skip_unet/
+│   ├── plain_unet/
+│   ├── qualitative_overlays/
+│   ├── road_unet/
+│   ├── .gitkeep
+│   ├── experiment_summary.csv
+│   ├── Final_Report.pdf
+│   └── model_figure.png
+├── scripts/
+│   ├── audit_kitti_masks.py
+│   ├── make_model_figure.py
+│   ├── prepare_kitti_road.py
+│   ├── run_everything.py
+│   ├── summarize_analysis.py
+│   └── verify_artifacts.py
+├── .env.example
+├── .gitignore
+├── README.md
+├── requirements.txt
+└── kitti_road_dataset.zip
+```
+
 ## Data
 
 Use KITTI Road/Lane Detection 2013:
