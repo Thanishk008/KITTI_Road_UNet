@@ -80,22 +80,39 @@ KITTI_Road_UNet/
 
 ## Data
 
-Use KITTI Road/Lane Detection 2013:
+Use the Kaggle dataset:
 
-https://www.cvlibs.net/datasets/kitti/eval_road.php
+https://www.kaggle.com/datasets/sumanyughoshal/kitti-road-dataset
+
+The dataset is not included in this repository submission because the raw files are too large to bundle with the code zip. After downloading the Kaggle archive, extract it so the folder `data/data_road/` exists in the project root.
 
 Expected layout:
 
 ```text
-data_road/
-  training/
-    image_2/*.png
-    gt_image_2/*.png
-  testing/
-    image_2/*.png
+data/
+  data_road/
+    training/
+      image_2/*.png
+      gt_image_2/*.png
+    testing/
+      image_2/*.png
 ```
 
 The public KITTI test split has no labels, so this project evaluates on a deterministic validation split from the labeled training set.
+
+After placing the raw dataset under `data/data_road/`, prepare the processed split with:
+
+```bash
+python scripts/prepare_kitti_road.py --data data/data_road --out data/processed/kitti_road
+```
+
+If you want to verify the KITTI label masks before training, run:
+
+```bash
+python scripts/audit_kitti_masks.py --data data/data_road --out reports/mask_audit
+```
+
+For submission size reasons, this repository keeps only the main model's best checkpoint and omits the larger set of training checkpoints.
 
 ## Colab GPU Workflow
 
