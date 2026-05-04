@@ -22,6 +22,8 @@ no_skip_unet
 
 These three experiments provide the main model, a baseline, and a skip-connection ablation under matched training conditions.
 
+The final project report included with this submission is `reports/Final_Report.pdf`.
+
 ## Repository Tree
 
 Current high-level repo layout:
