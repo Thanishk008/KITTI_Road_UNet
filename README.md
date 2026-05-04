@@ -28,54 +28,53 @@ Current high-level repo layout:
 
 ```text
 KITTI_Road_UNet/
-├── checkpoints/
-│   ├── no_skip_unet/
-│   ├── plain_unet/
-│   ├── road_unet/
-│   └── .gitkeep
-├── configs/
-│   ├── no_skip_unet.yaml
-│   ├── plain_unet.yaml
-│   └── road_unet.yaml
-├── data/
-│   ├── data_road/
-│   ├── processed/
-│   └── README.md
-├── kitti_road/
-│   ├── __init__.py
-│   ├── datasets.py
-│   ├── evaluate.py
-│   ├── losses.py
-│   ├── metrics.py
-│   ├── models.py
-│   ├── predict.py
-│   ├── train.py
-│   ├── utils.py
-│   └── visualize.py
-├── reports/
-│   ├── analysis/
-│   ├── error_examples/
-│   ├── mask_audit/
-│   ├── no_skip_unet/
-│   ├── plain_unet/
-│   ├── qualitative_overlays/
-│   ├── road_unet/
-│   ├── .gitkeep
-│   ├── experiment_summary.csv
-│   ├── Final_Report.pdf
-│   └── model_figure.png
-├── scripts/
-│   ├── audit_kitti_masks.py
-│   ├── make_model_figure.py
-│   ├── prepare_kitti_road.py
-│   ├── run_everything.py
-│   ├── summarize_analysis.py
-│   └── verify_artifacts.py
-├── .env.example
-├── .gitignore
-├── README.md
-├── requirements.txt
-└── kitti_road_dataset.zip
+|-- checkpoints/
+|   |-- road_unet/
+|   |   `-- road_unet_best.pt
+|   `-- .gitkeep
+|-- configs/
+|   |-- no_skip_unet.yaml
+|   |-- plain_unet.yaml
+|   `-- road_unet.yaml
+|-- data/
+|   |-- data_road/
+|   |-- processed/
+|   `-- README.md
+|-- kitti_road/
+|   |-- __init__.py
+|   |-- datasets.py
+|   |-- evaluate.py
+|   |-- losses.py
+|   |-- metrics.py
+|   |-- models.py
+|   |-- predict.py
+|   |-- train.py
+|   |-- utils.py
+|   `-- visualize.py
+|-- reports/
+|   |-- analysis/
+|   |-- error_examples/
+|   |-- mask_audit/
+|   |-- no_skip_unet/
+|   |-- plain_unet/
+|   |-- qualitative_overlays/
+|   |-- road_unet/
+|   |-- .gitkeep
+|   |-- experiment_summary.csv
+|   |-- Final_Report.pdf
+|   `-- model_figure.png
+|-- scripts/
+|   |-- audit_kitti_masks.py
+|   |-- make_model_figure.py
+|   |-- prepare_kitti_road.py
+|   |-- run_everything.py
+|   |-- summarize_analysis.py
+|   `-- verify_artifacts.py
+|-- .env.example
+|-- .gitignore
+|-- README.md
+|-- requirements.txt
+`-- kitti_road_dataset.zip
 ```
 
 ## Data
@@ -84,7 +83,7 @@ Use the Kaggle dataset:
 
 https://www.kaggle.com/datasets/sumanyughoshal/kitti-road-dataset
 
-The dataset is not included in this repository submission because the raw files are too large to bundle with the code zip. After downloading the Kaggle archive, extract it so the folder `data/data_road/` exists in the project root.
+The dataset is not included in this repository submission because the raw files are too large to bundle with the code zip. Downloading and extracting the Kaggle archive gives you the `data_road/` folder directly. Place that folder under `data/` so the final path is `data/data_road/`.
 
 Expected layout:
 
@@ -112,7 +111,7 @@ If you want to verify the KITTI label masks before training, run:
 python scripts/audit_kitti_masks.py --data data/data_road --out reports/mask_audit
 ```
 
-For submission size reasons, this repository keeps only the main model's best checkpoint and omits the larger set of training checkpoints.
+For submission size reasons, this repository keeps only the main model's best checkpoint, `checkpoints/road_unet/road_unet_best.pt`, and omits the larger set of training checkpoints.
 
 ## Colab GPU Workflow
 
